@@ -1,0 +1,160 @@
+//var prompt = require('prompt');
+var valEmp = require('./ValidateEmployee.js');
+var emp = require('./Employee.js');
+var prompt = require('sync-prompt').prompt;
+var net = require('net');
+
+var HOST = '127.0.0.1';
+var PORT = 6969;
+
+var client = new net.Socket();
+
+client.connect(PORT, HOST, function() {
+
+    console.log('CONNECTED TO: ' + HOST + ':' + PORT);
+    // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client
+
+
+        while(true){
+        console.log("1.Insert Employee\n2.Edit Employee\n3.Search Employee\n4.List Employee\n5.Exit\n");
+        var ans = prompt('Enter Number: ');
+
+          if (ans == 1)
+              insertEmployee();
+          else if (ans == 2)
+              editEmployee();
+          else if (ans == 3)
+              searchEmployee();
+          else if (ans == 4)
+              listEmployee();
+          else
+          console.log(ans + " is not a valid Answer");
+
+      }
+
+
+    //client.write('I am Chuck Norris!');
+});
+
+// Add a 'data' event handler for the client socket
+// data is what the server sent to this socket
+client.on('data', function(data) {
+
+
+
+    console.log('DATA: ' + data);
+    // Close the client socket completely
+
+
+});
+
+// Add a 'close' event handler for the client socket
+client.on('close', function() {
+    console.log('Connection closed');
+});
+
+
+function insertEmployee(){
+
+   console.log('Insert Employee');
+   var cod = 'insert,';
+
+   var code = valEmp.generateCode();
+   console.log('Code: ' + code);
+
+   cod2="unique,";
+   cod2 += code;
+   client.write(cod2,'utf-8');
+   enc = s.recv(1024);
+   res = enc.decode('utf-8');
+   if(res == code){
+       console.log("Code already exists try again");
+       return;
+  }
+
+   emp = getValidatedEmployee(code);
+
+   if(emp)
+       cod += emp.getEmployeeData();
+   else
+       return;
+
+   s.send(cod.encode('utf-8'))
+   console.log("Employee Added Correctly \n")
+
+}
+function editEmployee(){
+
+  console.log('Edit Employee');
+
+}
+
+function searchEmployee(){
+
+  console.log('Search Employee');
+
+}
+
+function listEmployee(){
+
+  console.log('List Employees');
+
+}
+
+function getValidatedEmployee(code){
+    var uni = 'unique,';
+    var uniE = 'unique,';
+    var uniN = 'unique,';
+    var name = prompt('Enter Name: \n');
+
+    if(valEmp.validateName(name)){
+        console.log(name + ' Is not valid');
+        return null;
+    }
+    email = prompt('Enter Email: \n')
+    if(valEmp.validateEmail(email)){
+        console.log(email + ' Is not valid');
+        return null;
+    }
+    uniE += email;
+    s.send(uniE.encode('utf-8'))
+    enc = s.recv(1024)
+    if(enc.decode('utf-8') == email){
+        print("Email Duplicated")
+        return null
+    }
+    salary = prompt('Enter Salary: \n')
+    if(valEmp.validateSalary(salary)){
+        console.log(salary + ' Is not valid')
+        return null
+    }
+    id = prompt('Enter ID: ')
+    if(valEmp.validateId(id)){
+        console.log(id + ' Is not valid')
+        return null
+    }
+    uni += id;
+    s.send(uni.encode('utf-8'))
+    enc = s.recv(1024);
+    if (enc.decode('utf-8') == id){
+        console.log("ID Duplicated")
+        return null;
+    }
+    phone = prompt('Enter Phone number: \n')
+    if (valEmp.validatePhone(phone)){
+        console.log(str(phone) + ' Is not valid')
+        return null
+    }
+    uniN += phone;
+    s.send(uniN.encode('utf-8'))
+    enc = s.recv(1024)
+    if(enc.decode('utf-8') == phone){
+        console.log("Phone Duplicated")
+        return null
+    }
+
+
+    var e = new emp.Employee(code,name,email,salary,id,phone)
+    console.log("Validated")
+    return e
+}
