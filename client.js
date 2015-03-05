@@ -15,32 +15,12 @@ client.connect(PORT, HOST, function() {
     // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client
 
 
-            while(true){
-            console.log("1.Insert Employee\n2.Edit Employee\n3.Search Employee\n4.List Employee\n5.Exit\n");
-            var ans = prompt('Enter Number: ');
-
-              if (ans == 1)
-                  insertEmployee();
-              else if (ans == 2)
-                  editEmployee();
-              else if (ans == 3)
-                  searchEmployee();
-              else if (ans == 4){
-                  listEmployee();
-                  client.on('data', function(data) {
-                    console.log('DATA: ' + data);});
-              }
-              else
-              console.log(ans + " is not a valid Answer");
-
-          }
-
-
     //client.write('I am Chuck Norris!');
 });
 
 // Add a 'data' event handler for the client socket
 // data is what the server sent to this socket
+jumpMenu();
 client.on('data', function(data) {
 
 
@@ -48,7 +28,7 @@ client.on('data', function(data) {
     console.log('DATA: ' + data);
     // Close the client socket completely
 
-
+    jumpMenu();
 });
 
 // Add a 'close' event handler for the client socket
@@ -83,8 +63,7 @@ function insertEmployee(){
        return;
 
    client.write(cod);
-   console.log("Employee Added Correctly \n")
-
+   
 }
 function editEmployee(){
 
@@ -106,6 +85,28 @@ function listEmployee(){
    client.write(cod);
 
 
+}
+
+function jumpMenu(){
+
+  while(true){
+  console.log("1.Insert Employee\n2.Edit Employee\n3.Search Employee\n4.List Employee\n5.Exit\n");
+  var ans = prompt('Enter Number: ');
+
+    if (ans == 1){
+        insertEmployee();
+        return;
+    }else if (ans == 2)
+        editEmployee();
+    else if (ans == 3)
+        searchEmployee();
+    else if (ans == 4){
+        listEmployee();return;
+    }
+    else
+    console.log(ans + " is not a valid Answer");
+
+  }
 }
 
 function getValidatedEmployee(code){

@@ -23,30 +23,32 @@ net.createServer(function(sock) {
         if(tokens[0] == 'list'){
           console.log('llego');
             var enc = empMan.listEmployees();
-            //client_socket.send(enc.encode('utf-8'));
-
             console.log(enc);
             sock.write(enc);
         }
 
         else if(tokens[0] == 'search'){
-            enc = empMan.searchEmployee(tokens[1].decode('utf-8'));
-            client_socket.send(enc.encode('utf-8')) ;
+            enc = empMan.searchEmployee(tokens[1]);
+            sock.write(enc);
         }
         else if(tokens[0] == 'insert'){
             console.log(tokens[1]);
             empMan.insertEmployee(tokens[1]);
+            console.log("Employee Added Correctly \n")
+            sock.write(tokens[1]);
         }
 
         else if(tokens[0] == 'edit')
             empMan.editEmployee(tokens[1], tokens[2]);
 
 
+
+
         else if(tokens[0] == "unique"){
-            enc = empMan.findValue(tokens[1].decode('utf-8'));
-            client_socket.send(enc.encode('utf-8'));
+            enc = empMan.findValue(tokens[1]);
+            sock.write(enc);
         }
-        sock.write('You said "' + data + '"');
+
 
     });
 
