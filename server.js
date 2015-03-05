@@ -1,5 +1,7 @@
-var net = require('net');
 var empMan = require('./EmployeeManager.js');
+
+var net = require('net');
+
 var HOST = '127.0.0.1';
 var PORT = 6969;
 
@@ -16,13 +18,15 @@ net.createServer(function(sock) {
 
         console.log('DATA ' + sock.remoteAddress + ': ' + data);
         // Write the data back to the socket, the client will receive it as data from the server
-        sock.write('You said "' + data + '"');
-        client_data = client_socket.recv(1024)
-        d = client_data.decode('utf-8')
-        tokens = d.split(",")
+
+        var tokens = String(data).split(",")
         if(tokens[0] == 'list'){
-            var enc = empMan.listEmployees()
-            client_socket.send(enc.encode('utf-8'));
+          console.log('llego');
+            var enc = empMan.listEmployees();
+            //client_socket.send(enc.encode('utf-8'));
+
+            console.log(enc);
+            sock.write(enc);
         }
 
         else if(tokens[0] == 'search'){
@@ -30,8 +34,8 @@ net.createServer(function(sock) {
             client_socket.send(enc.encode('utf-8')) ;
         }
         else if(tokens[0] == 'insert'){
-            console.log(tokens[1])
-            EmployeeManager.insertEmployee(tokens[1]);
+            console.log(tokens[1]);
+            empMan.insertEmployee(tokens[1]);
         }
 
         else if(tokens[0] == 'edit')
@@ -42,11 +46,7 @@ net.createServer(function(sock) {
             enc = empMan.findValue(tokens[1].decode('utf-8'));
             client_socket.send(enc.encode('utf-8'));
         }
-
-
-
-        console.log('Closing connection with the client...')
-        client_socket.close()
+        sock.write('You said "' + data + '"');
 
     });
 

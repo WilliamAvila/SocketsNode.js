@@ -10,6 +10,6 @@ exports.Employee = function(codeEmployee, nameEmployee, email, salary, idEmploye
 
 function getEmployeeData(){
       st = this.codeEmployee+" "
-      st += this.name+" "+this.email+" "+this.salary+" "+this.id+" "+this.phone+"\n"
+      st += this.nameEmployee+" "+this.email+" "+this.salary+" "+this.idEmployee+" "+this.phone+"\n"
       return st
 }

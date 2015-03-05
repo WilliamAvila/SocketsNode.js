@@ -29,7 +29,7 @@ exports.validateEmail = function(email){
 }
 
 exports.validateSalary = function(salary){
-  if (!name.salary(/^[0-9]*$/)){
+  if (!salary.match(/^[0-9]*$/)){
     return true;
   }else{
     return false;
@@ -37,7 +37,7 @@ exports.validateSalary = function(salary){
 }
 
 exports.validateId = function(id){
-  if (!i.match(/^[0-9]{13}$/)){
+  if (!id.match(/^[0-9]{13}$/)){
     return true;
   }else{
     return false;
